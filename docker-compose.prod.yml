@@ -1,0 +1,59 @@
+version: '3.4'
+services:
+
+  postgres-vdtsl:
+    image: kuzinmv83/vdtsl-postgresql-repo:latest
+    ports:
+      - 5439:5432
+    volumes:
+      - postgres-init:/docker-entrypoint-initdb.d/
+    networks:
+      - default
+
+  node-vdtsl:
+    image: kuzinmv83/vdtsl-node-repo:latest
+    ports:
+      - 3000:3000
+      - 3001:3001
+      - 3002:3002
+      - 3003:3003
+      - 3004:3004
+    volumes:
+      - supervisor-logs:/var/log/supervisor
+    depends_on:
+      - postgres-vdtsl
+    networks:
+      - default
+    environment:
+      DESTINATION_URL: 'http://92.124.155.145:8083/api/traffic/aggregate'
+#     DESTINATION_URL: 'https://webhook.site/76a7dc54-5c04-4081-b97d-09255071fd67'
+
+  nginx-vdtsl:
+    image: kuzinmv83/vdtsl-nginx-repo:latest
+    depends_on:
+      - node-vdtsl
+    ports:
+      - 80:80
+    volumes:
+      - nginx-logs:/var/log/nginx
+    networks:
+      - default
+
+  rabbitmq-vdtsl:
+    image: rabbitmq:3.7.5-management
+    hostname: rabbitmq
+    user: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_VHOST: /
+
+
+volumes:
+  postgres-init:
+  supervisor-logs:
+  nginx-logs:
+
+networks:
+  default:
