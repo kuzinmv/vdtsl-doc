@@ -25,15 +25,16 @@ services:
     networks:
       - default
     environment:
+      REFRESH_MODELS: 1
       DESTINATION_URL: 'http://92.124.155.145:8083/api/traffic/aggregate'
-#     DESTINATION_URL: 'https://webhook.site/76a7dc54-5c04-4081-b97d-09255071fd67'
+  #     DESTINATION_URL: 'https://webhook.site/76a7dc54-5c04-4081-b97d-09255071fd67'
 
   nginx-vdtsl:
     image: kuzinmv83/vdtsl-nginx-repo:latest
     depends_on:
       - node-vdtsl
     ports:
-      - 80:80
+      - 8001:80
     volumes:
       - nginx-logs:/var/log/nginx
     networks:
