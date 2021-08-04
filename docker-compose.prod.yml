@@ -22,11 +22,13 @@ services:
       - supervisor-logs:/var/log/supervisor
     depends_on:
       - postgres-vdtsl
+      - rabbitmq-vdtsl
     networks:
       - default
     environment:
       REFRESH_MODELS: 1
       DESTINATION_URL: 'http://92.124.155.145:8083/api/traffic/aggregate'
+      RABBITMQ_URL: 'amqp://guest:guest@rabbitmq-vdtsl:5672?heartbeat=0'
   #     DESTINATION_URL: 'https://webhook.site/76a7dc54-5c04-4081-b97d-09255071fd67'
 
   nginx-vdtsl:
@@ -42,14 +44,11 @@ services:
 
   rabbitmq-vdtsl:
     image: rabbitmq:3.7.5-management
-    hostname: rabbitmq
-    user: rabbitmq
     ports:
       - 5672:5672
       - 15672:15672
     environment:
       RABBITMQ_DEFAULT_VHOST: /
-
 
 volumes:
   postgres-init:

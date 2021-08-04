@@ -74,7 +74,7 @@
    В сборке присутствует 2 csv файла точек из региона Спб за 26-05-2021 по одному часу 00 и 12 по UTC 
    
    Внутри nodejs контейнера
-   `root@6dff1a3d673a:/usr/src/app# node push-csvmock.js mock/area1/8-2021052600.csv `    
+   `root@6dff1a3d673a:/usr/src/app# node push-csvmock.js mock/area1/8-2021052600.csv localhost 3000`    
 
    Результат запуска скрипта.
    
